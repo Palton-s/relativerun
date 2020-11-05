@@ -8,7 +8,11 @@ const Stack = createStackNavigator();
 
 export default function Home(){
     return(
-        <Stack.Navigator>
+        <Timer/>
+    )
+}
+/*
+<Stack.Navigator>
             <Stack.Screen
             name="RelativeRun"
             component={Main}
@@ -42,5 +46,4 @@ export default function Home(){
             }}
             />
         </Stack.Navigator>
-    )
-}
+*/
