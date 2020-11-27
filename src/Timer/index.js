@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons , Octicons , Entypo } from '@expo/vector-icons';
 import AnalogClock from '../components/AnalogClock';
 import DigitalClock from '../components/DigitalClock';
 import { InfoCard , Card, CardFigure, InfoText } from './styles';
-import {Text, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet, ScrollView , Modal, View} from 'react-native';
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
 
@@ -15,6 +15,7 @@ export default class Timer extends Component{
 
             this.state = {
                 timer: null,
+                modalVisible: false,
                 number: 0,
                 relativisticNumber: 0,
                 startStopIcon: "av-timer",
@@ -27,11 +28,13 @@ export default class Timer extends Component{
                 velocityMultiplicator: 200,
             }
 
+
             this.startStopButton = this.startStopButton.bind(this);
             this.clearButton = this.clearButton.bind(this);
             this.refToogle = this.refToogle.bind(this);
             this.dilactedTime = this.dilactedTime.bind(this);
             this.assyncoticVelocity = this.assyncoticVelocity.bind(this);
+            this.toogleModal = this.toogleModal.bind(this);
             
         }
 
@@ -48,17 +51,21 @@ export default class Timer extends Component{
                      },
                     (loc) => {
                         let newS = this.state;
-                        newS.velocity = parseFloat(loc.coords.speed);
+                        newS.velocity = parseFloat((loc.coords.speed).toFixed(1));
                         this.setState(newS);
                     }
                   )
           
                 })();
         }
+        
+        toogleModal(){
+            this.setState({modalVisible: !this.state.modalVisible});
+        }
+        
+
         componentWillUnmount(){
-            let newS = this.state;
-            newS.velocity = 0;
-            this.setState(newS);
+            this.setState({velocity: 0});
         }
 
 
@@ -71,10 +78,8 @@ export default class Timer extends Component{
         }
 
         assyncoticVelocity(){
-            let newState = this.state;
             let assyntoticFunction = this.state.lightVelocity*(this.state.velocity/2)/((this.state.velocity/2)+1);
-            newState.bustedVelocity = assyntoticFunction;
-            this.setState(newState);
+            this.setState({bustedVelocity: assyntoticFunction});
         }
 
         startStopButton(){
@@ -125,45 +130,43 @@ export default class Timer extends Component{
         render(){
             return (
                 <ScrollView style={{paddingTop: Constants.statusBarHeight, paddingBottom:Constants.statusBarHeight, }}>
-                    <InfoCard>
-                        <InfoText>
-                            Referencial em movimento
-                        </InfoText>
-                    </InfoCard>
-                    <AnalogClock time={this.state.relativisticNumber}></AnalogClock>
-                    <DigitalClock time={this.state.relativisticNumber}></DigitalClock>
-                    <InfoCard>
-                        <InfoText>
-                            Referencial parado
-                        </InfoText>
-                    </InfoCard>
-                    <AnalogClock time={this.state.number}></AnalogClock>
-                    <DigitalClock time={this.state.number}></DigitalClock>
-                
-                <Card>
-                    <TouchableOpacity
-                    onPress={this.clearButton}
-                    style={styles.btnTouch}><MaterialIcons name="timer-off" size={50} color="#fff" /></TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={this.startStopButton}
-                    style={styles.btnTouch}><MaterialIcons name={this.state.startStopIcon} size={50} color="#fff" /></TouchableOpacity>
-    
                     
-                </Card>
-                <InfoCard>
-                    <InfoText>Velocidade real: {(this.state.velocity).toFixed(1)} m/s</InfoText>
-                    <InfoText>Velocidade simulada: {(this.state.bustedVelocity).toFixed(1)} m/s</InfoText>
-                    <InfoText>Velocidade simulada: {(this.state.bustedVelocity/this.state.lightVelocity).toFixed(5)} c</InfoText>
-                    <InfoText>Percentual da dilatação temporal: {this.state.atualizationTimeDilated.toFixed(2)}%</InfoText>
-                </InfoCard>
-                
-                
-    
-                <CardFigure>
-            <TouchableOpacity 
-            onPress={this.refToogle}
-            style={(this.state.referencial=="parado")?styles.btnRefDesactived:styles.btnRefActived}><Text style={(this.state.referencial=="parado")?styles.LabelDesactived:styles.LabelActived}>{(this.state.referencial=="parado")?"Referencial parado":"Referencial em movimento"}</Text></TouchableOpacity>
-                </CardFigure>
+                        <InfoCard>
+                            <InfoText>
+                                Referencial em movimento
+                            </InfoText>
+                        </InfoCard>
+                        <AnalogClock time={this.state.relativisticNumber}></AnalogClock>
+                        <DigitalClock time={this.state.relativisticNumber}></DigitalClock>
+                        <Card>
+                        <TouchableOpacity
+                        onPress={this.clearButton}
+                        style={styles.btnTouch}><MaterialIcons name="timer-off" size={50} color="#fff" /></TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={this.startStopButton}
+                        style={styles.btnTouch}><MaterialIcons name={this.state.startStopIcon} size={50} color="#fff" /></TouchableOpacity>
+        
+                        
+                    </Card>
+                        <InfoCard>
+                            <InfoText>
+                                Referencial parado
+                            </InfoText>
+                        </InfoCard>
+                        <AnalogClock time={this.state.number}></AnalogClock>
+                        <DigitalClock time={this.state.number}></DigitalClock>
+                    
+                    
+                    <Card>
+                        <View style={styles.centeredView}>
+                            <InfoCard style={{marginBottom: 40}}>
+                                <InfoText>Velocidade real: {(this.state.velocity).toFixed(1)} m/s</InfoText>
+                                <InfoText>Velocidade simulada: {(this.state.bustedVelocity).toFixed(1)} m/s</InfoText>
+                                <InfoText>Velocidade simulada: {(this.state.bustedVelocity/this.state.lightVelocity).toFixed(5)} c</InfoText>
+                                <InfoText>Percentual da dilatação temporal: {this.state.atualizationTimeDilated.toFixed(2)}%</InfoText>
+                            </InfoCard>
+                        </View>
+                    </Card>
                 </ScrollView>
     
             );
@@ -172,6 +175,12 @@ export default class Timer extends Component{
   
 
   const styles = StyleSheet.create({
+        centeredView: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 22,
+        },
         scroolView:{
             flex: 1,
             marginTop: Constants.statusBarHeight,

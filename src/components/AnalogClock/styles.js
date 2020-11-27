@@ -16,7 +16,7 @@ export const SecondPointer = styled.View`
     width: 220px;
     height: 220px;
     border-radius: 110px;
-    border: 5px solid transparent;
+    border: 5px solid #f77;
     position: absolute;
     z-index:10;
     
@@ -46,7 +46,10 @@ export const Clock = styled.View`
 export const Img = styled.Image`
     width: 210px;
     height: 210px;
+`;
+export const aroClock = styled.View`
+    width: 210px;
+    height: 210px;
     border-radius: 110px;
     border: 5px solid #FF7777;
 `;
-
