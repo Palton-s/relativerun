@@ -163,7 +163,7 @@ export default class Timer extends Component{
                                 <InfoText>Velocidade real: {(this.state.velocity).toFixed(1)} m/s</InfoText>
                                 <InfoText>Velocidade simulada: {(this.state.bustedVelocity).toFixed(1)} m/s</InfoText>
                                 <InfoText>Velocidade simulada: {(this.state.bustedVelocity/this.state.lightVelocity).toFixed(5)} c</InfoText>
-                                <InfoText>Percentual da dilatação temporal: {this.state.atualizationTimeDilated.toFixed(2)}%</InfoText>
+                                <InfoText>Percentual da dilatação temporal: {(100-this.state.atualizationTimeDilated.toFixed(2))}%</InfoText>
                             </InfoCard>
                         </View>
                     </Card>
